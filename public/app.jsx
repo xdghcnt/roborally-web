@@ -637,8 +637,8 @@ class Lobby extends React.Component {
             <section className="lobby-members panel">
                 <div className="member-column"><h3>Игроки <small>{playerCount}/8</small></h3>
                     {players.length ? players.map((userId) => <div className="lobby-member" key={userId}>
-                        <i style={{background: colorFor(userId)}}></i>
-                        <span><PlayerName data={state} id={userId}/> {userId === state.hostId ? <small>хост</small> : null}</span>
+                        <i className="member-color" style={{background: colorFor(userId)}}></i>
+                        <span className="member-name"><PlayerName data={state} id={userId}/> {userId === state.hostId ? <small>хост</small> : null}</span>
                         <MemberHostControls state={state} userId={userId}/>
                         <em>старт {((state.startAssignments || {})[userId] ?? 0) + 1}</em>
                         {userId === state.userId ? <b>вы</b> : null}
@@ -646,7 +646,7 @@ class Lobby extends React.Component {
                 </div>
                 <div className="member-column"><h3>Зрители <small>{spectators.length}</small></h3>
                     {spectators.length ? spectators.map((userId) => <div className="lobby-member spectator" key={userId}>
-                        <span><PlayerName data={state} id={userId}/> {userId === state.hostId ? <small>хост</small> : null}</span>
+                        <span className="member-name"><PlayerName data={state} id={userId}/> {userId === state.hostId ? <small>хост</small> : null}</span>
                         <MemberHostControls state={state} userId={userId}/>
                         {userId === state.userId ? <b>вы</b> : null}
                     </div>) : <p className="empty-members">Нет зрителей.</p>}
@@ -1110,6 +1110,8 @@ class Game extends React.Component {
             this.forceUpdate();
         });
         this.socket.on("message", (message) => popup.alert({content: message}));
+        // The engine drops anyone who does not answer its periodic ping ("Ping timeout")
+        this.socket.on("ping", (id) => this.socket.emit("pong", id));
         this.socket.emit("init", initArgs);
     }
 
