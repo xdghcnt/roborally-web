@@ -38,15 +38,15 @@ server.stderr.on("data", (chunk) => serverError += String(chunk));
     await host.locator(".program").waitFor();
     await guest.locator(".program").waitFor();
 
-    assert.equal(await host.locator(".host-controls").count(), 1, "host pause panel is missing");
-    assert.equal(await guest.locator(".host-controls").count(), 0, "guest can see host controls");
-    await host.locator(".host-controls button").click();
+    assert.equal(await host.locator(".game-pause-controls").count(), 1, "host pause panel is missing");
+    assert.equal(await guest.locator(".game-pause-controls").count(), 0, "guest can see host controls");
+    await host.locator(".game-pause-controls button").click();
     await host.locator(".pause-banner").waitFor();
     await guest.locator(".pause-banner").waitFor();
-    assert(await host.locator(".host-controls button", {hasText: "Продолжить"}).count());
+    assert(await host.locator(".game-pause-controls button", {hasText: "Продолжить"}).count());
     assert(await guest.locator(".card").first().isDisabled(), "program cards remain interactive during pause");
 
-    await host.locator(".host-controls button").click();
+    await host.locator(".game-pause-controls button").click();
     await host.locator(".pause-banner").waitFor({state: "detached"});
     await guest.locator(".pause-banner").waitFor({state: "detached"});
     assert(!await guest.locator(".card").first().isDisabled(), "program cards did not unlock after resume");

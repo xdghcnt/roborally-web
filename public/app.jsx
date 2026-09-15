@@ -565,7 +565,7 @@ function CourseSpecialRules({course}) {
 
 function GamePauseControls({state, app}) {
     if (state.userId !== state.hostId || state.phase === "lobby" || state.phase === "finished") return null;
-    return <section className="panel host-controls">
+    return <section className="panel game-pause-controls">
         <h2>Управление игрой</h2>
         <button type="button" className={state.paused ? "resume" : "pause"}
             aria-pressed={!!state.paused}
